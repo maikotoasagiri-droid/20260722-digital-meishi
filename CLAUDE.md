@@ -1,5 +1,8 @@
 # デジタル名刺（QR連絡先交換）
 
+- Notion page_id: `3a53cf05-4871-81f1-8419-fa4397909a00`
+- GitHub: https://github.com/maikotoasagiri-droid/20260722-digital-meishi （public・GitHub Pages利用予定）
+
 ## プロジェクト概要
 vCard 3.0直埋め込みQR（メイン・オフライン完結）＋GitHub Pagesプロフィールページ＋.vcf（併用・更新容易）のハイブリッド方式。フェーズ1: QR生成＋実機検証（〜2026-07-24）、フェーズ2: GitHub Pages公開（〜2026-07-31）、フェーズ3: SNS連携（拡張・スコープ外）。技術決定: vCard 3.0採用（4.0はAndroid互換性難）・UTF-8統一・QRテキスト300文字以内。
 
