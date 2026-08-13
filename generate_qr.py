@@ -1,0 +1,90 @@
+import json
+import sys
+from pathlib import Path
+
+import qrcode
+from qrcode.constants import ERROR_CORRECT_H
+
+BASE_DIR = Path(__file__).resolve().parent
+PROFILE_PATH = BASE_DIR / "profile.json"
+OUTPUT_PATH = BASE_DIR / "output" / "meishi_qr.png"
+MAX_VCARD_BYTES = 300
+
+
+def load_profile(path):
+    if not path.exists():
+        print(f"エラー: {path.name} が見つかりません")
+        sys.exit(1)
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except json.JSONDecodeError as e:
+        print(f"エラー: {path.name} のJSON読み込みに失敗しました: {e}")
+        sys.exit(1)
+
+
+def build_vcard(profile):
+    name = profile.get("name", "").strip()
+    org = profile.get("org", "").strip()
+    title = profile.get("title", "").strip()
+    tel = profile.get("tel", "").strip()
+    email = profile.get("email", "").strip()
+    url = profile.get("url", "").strip()
+
+    lines = ["BEGIN:VCARD", "VERSION:3.0"]
+
+    parts = name.split()
+    if len(parts) == 2:
+        sei, mei = parts
+        lines.append(f"N:{sei};{mei};;;")
+    lines.append(f"FN:{name}")
+
+    if org:
+        lines.append(f"ORG:{org}")
+    if title:
+        lines.append(f"TITLE:{title}")
+    if tel:
+        lines.append(f"TEL;TYPE=CELL:{tel}")
+    if email:
+        lines.append(f"EMAIL:{email}")
+    if url:
+        lines.append(f"URL:{url}")
+
+    lines.append("END:VCARD")
+    return "\r\n".join(lines)
+
+
+def main():
+    profile = load_profile(PROFILE_PATH)
+
+    name = profile.get("name", "").strip()
+    tel = profile.get("tel", "").strip()
+    email = profile.get("email", "").strip()
+
+    if not name and not tel and not email:
+        print("氏名と連絡先（電話またはメール）は必須です")
+        sys.exit(1)
+
+    vcard = build_vcard(profile)
+
+    vcard_bytes = len(vcard.encode("utf-8"))
+    if vcard_bytes > MAX_VCARD_BYTES:
+        print(
+            f"vCardが300文字制限を超えています（現在{vcard_bytes}文字）。"
+            "urlやorgの削減を検討してください"
+        )
+        sys.exit(1)
+
+    qr = qrcode.QRCode(error_correction=ERROR_CORRECT_H)
+    qr.add_data(vcard)
+    qr.make(fit=True)
+    img = qr.make_image()
+
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    img.save(OUTPUT_PATH)
+
+    print(f"生成完了: output/meishi_qr.png（vCard文字数: {len(vcard)}文字）")
+
+
+if __name__ == "__main__":
+    main()

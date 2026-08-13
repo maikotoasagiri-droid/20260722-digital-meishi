@@ -25,3 +25,9 @@ Thumbs.db
 # ログ
 *.log
 logs/
+
+# 個人情報
+profile.json
+
+# 生成物
+output/
