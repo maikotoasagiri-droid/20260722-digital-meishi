@@ -46,7 +46,8 @@ def build_vcard(profile):
         kana_parts = name_kana.split()
         if len(kana_parts) == 2:
             sei_kana, mei_kana = kana_parts
-            lines.append(f"SOUND:X-IRMC-N:{sei_kana};{mei_kana};;;")
+            lines.append(f"X-PHONETIC-LAST-NAME:{sei_kana}")
+            lines.append(f"X-PHONETIC-FIRST-NAME:{mei_kana}")
 
         lines.append(f"FN:{sei} {mei}")
     else:
