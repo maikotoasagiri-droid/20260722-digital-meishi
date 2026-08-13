@@ -3,7 +3,11 @@
   "name_kana": "ヤマダ タロウ",
   "org": "株式会社サンプル",
   "title": "営業部長",
+  "title2": "業界団体 常任理事",
   "tel": "090-1234-5678",
+  "tel_work": "03-1234-5678",
   "email": "taro.yamada@example.com",
-  "url": "https://example.com"
+  "url": "https://example.com",
+  "line_id": "yamada_taro",
+  "instagram_id": "@yamada_taro"
 }
