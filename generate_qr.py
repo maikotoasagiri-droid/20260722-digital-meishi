@@ -8,6 +8,7 @@ from qrcode.constants import ERROR_CORRECT_H
 BASE_DIR = Path(__file__).resolve().parent
 PROFILE_PATH = BASE_DIR / "profile.json"
 OUTPUT_PATH = BASE_DIR / "output" / "meishi_qr.png"
+VCARD_PATH = BASE_DIR / "output" / "meishi.vcf"
 MAX_VCARD_BYTES = 500
 
 
@@ -115,7 +116,11 @@ def main():
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     img.save(OUTPUT_PATH)
 
+    with open(VCARD_PATH, "w", encoding="utf-8", newline="") as f:
+        f.write(vcard + "\r\n")
+
     print(f"生成完了: output/meishi_qr.png（vCard文字数: {len(vcard)}文字）")
+    print("　　　　　 output/meishi.vcf（フリガナ込み・直接送付用）")
 
 
 if __name__ == "__main__":
